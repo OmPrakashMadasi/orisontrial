@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center">
+    <h4 class="display-6 text-black">Log-in for {{ school.name }}</h4>
+</div>
+<div class="form-container" style="margin-top: 20px;">
+    <h2>Login</h2>
+    <form id="loginForm" method="post" action="{% url 'login' slug=school.slug %}">
+        {% csrf_token %}
+        <!-- Username -->
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required placeholder="Enter your username" style="width: 100%;">
+
+        <!-- Password -->
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Enter your password">
+
+        <!-- Submit Button -->
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+{% endblock %}

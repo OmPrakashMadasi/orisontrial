@@ -1,0 +1,137 @@
+
+
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="form-container" style="margin-top: 30px;">
+    <h2>Register for {{ school.name }} </h2>
+    <form id="registerForm" method="post" action="{% url 'register' slug=school.slug %}">
+        {% csrf_token %}
+
+        <!-- Username -->
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        <div class="input-group mb-1">
+        {{ form.username }}
+        <div id="usernameError" class="error"></div>
+        </div>
+        <!-- Email -->
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        <div class="input-group mb-1">
+        {{ form.email }}
+        <div id="emailError" class="error"></div>
+        </div>
+        <!-- Mobile Number -->
+        <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
+        <div class="input-group mb-1">
+        {{ form.mobile_number }}
+        <div id="mobileError" class="error"></div>
+        </div>
+        <!-- Password -->
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        <div class="input-group mb-1">
+        {{ form.password1 }}
+        <div id="passwordError" class="error"></div>
+        </div>
+        <!-- Confirm Password -->
+         <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+        <div class="input-group mb-1">
+        {{ form.password2 }}
+        <div id="confirmPasswordError" class="error"></div>
+        </div>
+        <!-- Submit Button -->
+        <button type="submit">Register</button>
+    </form>
+
+</div>
+<div class="d-flex justify-content-center mt-1">
+    If you already have an Account &nbsp;
+    <form action="{% url 'login' slug=school.slug %}">
+        <button class="btn" style="background-color: black; color:white;width: 150px;">
+            Click here
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+        let isValid = true;
+
+        // Clear all errors
+        document.querySelectorAll('.error').forEach(err => err.textContent = '');
+
+        // Form Validation
+        const fields = [
+            { id: 'username', errorId: 'usernameError', pattern: null, message: 'Username is required.' },
+            { id: 'email', errorId: 'emailError', pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: 'Please enter a valid email address.' },
+            { id: 'mobile', errorId: 'mobileError', pattern: /^[0-9]{10}$/, message: 'Please enter a valid 10-digit mobile number.' },
+            { id: 'password', errorId: 'passwordError', pattern: /.{6,}/, message: 'Password must be at least 6 characters long.' },
+        ];
+
+        fields.forEach(field => {
+            const input = document.getElementById(field.id);
+            if (!input.value.trim() || (field.pattern && !field.pattern.test(input.value))) {
+                document.getElementById(field.errorId).textContent = field.message;
+                isValid = false;
+            }
+        });
+
+        if (document.getElementById('password').value !== document.getElementById('confirmPassword').value) {
+            document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
+            isValid = false;
+        }
+
+        // Prevent form submission if invalid
+        if (!isValid) e.preventDefault();
+    });
+</script>
+<style>
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-container label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-container input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-container button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .form-container button:hover {
+        background-color: #45a049;
+    }
+
+    .error {
+        color: red;
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

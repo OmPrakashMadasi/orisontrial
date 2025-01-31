@@ -1,0 +1,17 @@
+# resources.py
+from import_export import resources
+from .models import Profile, User, School
+
+class CombinedUserProfileResource(resources.ModelResource):
+    # Define fields to export
+    username = resources.Field(attribute='user__username', column_name='Username')
+    email = resources.Field(attribute='user__email', column_name='Email')
+    mobile_number = resources.Field(attribute='mobile_number', column_name='Mobile Number')
+    school_name = resources.Field(attribute='school__name', column_name='School')
+    school_address = resources.Field(attribute='school__address', column_name='School Address')
+
+    # Meta class to specify the model and the fields
+    class Meta:
+        model = Profile  # We base the resource on the Profile model
+        fields = ('username', 'email', 'mobile_number', 'school_name', 'school_address')  # Order of columns in the export
+        export_order = ('username', 'email', 'mobile_number', 'school_name', 'school_address')  # Ensure the right order in the file

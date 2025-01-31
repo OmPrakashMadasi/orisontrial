@@ -1,0 +1,55 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/Orison.jpeg' %}" alt="Orison Logo" class="navbar-logo"
+        style="width:150px;height: auto;border-radius: 50%;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+
+        {% if not user.is_authenticated %}
+          <!-- Show Schools dropdown only if the user is not authenticated -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="schoolDropdown" role="button"
+               data-bs-toggle="dropdown">Schools</a>
+            <ul class="dropdown-menu">
+              <!-- List all schools in the dropdown -->
+              {% for school in schools %}
+                <li>
+                  <a class="dropdown-item" href="{% url 'register' slug=school.slug %}">
+                    <div class="btn btn-outline-primary">
+                      <span>{{ school.name }}</span>
+                    </div>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% else %}
+          <!-- Show selected school if authenticated -->
+          {% if school %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'school_detail' slug=school.slug %}">Products</a>
+            </li>
+          {% endif %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        {% endif %}
+
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+      </ul>
+
+      <form class="d-flex" role="search" method="get" style="justify-content: center;">
+        <input class="form-control me-2" type="text" name="query" id="searchInput" placeholder="Search..."
+               style="width: 300px; height: 35px; font-size: 15px;" required>
+        <button class="btn small-search-button" type="submit" style="border-color: white; color: white;">Search</button>
+      </form>
+
+      <i class="bi bi-cart navbar-icons" style="margin-right: 40px;"></i>
+    </div>
+  </div>
+</nav>
