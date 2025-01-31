@@ -16,9 +16,15 @@ SECRET_KEY = 'django-insecure-%nu%qjb*l!vxispku^_6ch56prqw53puus5yi6j(ikw+9+qcwl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# settings.py
 
-CSRF_TRUSTED_ORIGINS = ['https://orisontrial.onrender.com/']
+ALLOWED_HOSTS = ['orisontrial.onrender.com', 'www.orisontrial.onrender.com']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://orisontrial.onrender.com',
+    'https://www.orisontrial.onrender.com'
+]
+
 # Application definition
 CSRF_COOKIE_SECURE = True  # If using HTTPS
 SESSION_COOKIE_SECURE = True  # If using HTTPS
