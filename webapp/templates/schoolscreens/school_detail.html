@@ -45,9 +45,11 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ product.name }}</h5>
                                 <p class="card-text">{{ product.description }}</p>
-                                <p class="card-text">{{ product.price }}</p>
+<!--                                <p class="card-text">{{ product.price }}</p>-->
                                 <div style="display: flex;">
+                                    <a href="{% url 'cart' %}">
                                     <button class="btn bg-dark text-light">Add to Cart</button>
+                                    </a>
                                     <div class="ms-3" style="display: flex; align-items: center; gap: 5px;">
                                         <!-- Label for Quantity -->
                                         <label for="shirtQuantity" class="form-label"
@@ -70,6 +72,7 @@
                                         <option value="" disabled selected>Select Size</option>
                                         {% for size in category.size.all %}
                                             <option value="{{ size.id }}">{{ size.size }}</option>
+
                                         {% endfor %}
                                     </select>
                                 </div>

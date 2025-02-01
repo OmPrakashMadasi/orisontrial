@@ -18,7 +18,7 @@ DEBUG = True
 
 # settings.py
 
-ALLOWED_HOSTS = ['orisontrial.onrender.com', 'www.orisontrial.onrender.com']
+ALLOWED_HOSTS = ['orisontrial.onrender.com', 'www.orisontrial.onrender.com', '127.0.0.1',]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://orisontrial.onrender.com',

@@ -45,7 +45,7 @@ def register_user(request, slug):
             # Store the selected school in the session
             request.session['school_slug'] = school.slug
 
-            messages.success(request, 'Congratulations you are into the orison world!!!...')
+            messages.success(request, 'registration is Successful, Please Login!!!...')
             return redirect('login', slug=school.slug)
         else:
             for error in list(form.errors.values()):
@@ -222,4 +222,6 @@ def search(request, slug):
         messages.error(request, "No Input found")
         return redirect('home')
 
+def cart_summary(request):
+    return render(request, 'summary/cart_summary.html')
 
