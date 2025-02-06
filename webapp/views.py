@@ -292,7 +292,7 @@ def remove_from_cart(request, item_id):
 
         request.session['cart_count'] = cart.items.count()
 
-
+        messages.success(request, 'Product is Removed!!!')
         return redirect('cart_summary', slug=school_slug)
 
         # If no cart item found, fallback to home or another page
@@ -340,7 +340,7 @@ def checkout(request, slug):
 
         # Format items as a user-friendly string
         items_text = "\n".join(
-            f"{item.quantity}x {item.product.name} - ₹{(item.product.price or 0) * item.quantity}"
+            f"{item.quantity}x {item.product.name} ({item.size.size if item.size else 'No Size'}) - ₹{(item.product.price or 0) * item.quantity}"
             for item in cart.items.all()
         )
 
@@ -357,7 +357,7 @@ def checkout(request, slug):
             phone=phone,
             address=address,
             total_price=total_price,
-            items=items_text
+            items=items_text,
         )
 
         # Clear the cart

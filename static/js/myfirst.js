@@ -4,7 +4,7 @@ setTimeout(() => {
         alertElement.classList.remove('show');
         alertElement.classList.add('fade');
     }
-},2000);
+},10000);
 
 // Registration Form Script
 

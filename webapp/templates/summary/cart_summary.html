@@ -49,8 +49,11 @@
             </div>
         </div>
     {% else %}
-        <p class="text-center text-muted">Your cart is empty.</p>
-    {% endif %}
+<!--        <p class="text-center text-muted">Your cart is empty.</p>-->
+    <div class="" align="center">
+    <img height="200px" src="https://d16py1fyt83ijv.cloudfront.net/vedobi/assets/img/empty-cart.webp" />
+    </div>
+        {% endif %}
 </div>
 
 <!-- Checkout Modal -->
@@ -86,7 +89,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-dark">Submit</button>
+                        <button type="submit" onclick="" class="btn btn-dark">Submit</button>
                     </div>
                 </form>
             </div>

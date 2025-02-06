@@ -92,7 +92,13 @@ class SchoolAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         super().delete_model(request, obj)
 admin.site.register(School, SchoolAdmin)
 
+class CartItemInline(admin.StackedInline):
+    model = CartItem
+    extra = 0
 
+class CartAdmin(admin.ModelAdmin):
+    model = Order
+    inlines = [CartItemInline]
 
 class OrderAdmin(ExportMixin, admin.ModelAdmin):
     resource_class = OrderResource
@@ -105,6 +111,6 @@ class OrderAdmin(ExportMixin, admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Size)
-admin.site.register(Cart)
+admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem)
 admin.site.register(Order, OrderAdmin)

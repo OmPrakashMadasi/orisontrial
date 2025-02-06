@@ -48,12 +48,15 @@
 
 </div>
 <div class="d-flex justify-content-center mt-1">
-    If you already have an Account &nbsp;
+    If you already have an Account :-&nbsp;
     <form action="{% url 'login' slug=school.slug %}">
         <button class="btn" style="background-color: black; color:white;width: 180px;">
             Click here to Login
         </button>
     </form>
+</div>
+<div class="text-center" >
+    <button class="btn btn-reset" type="reset" ><a href="{% url 'password_reset' %}">Forgot Password</a></button>
 </div>
 
 <script>
