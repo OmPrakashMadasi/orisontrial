@@ -10,7 +10,9 @@ from uuid import uuid4
 def generate_slug(school_name):
     """Generate a unique slug using the school name and a UUID for uniqueness."""
     base_slug = slugify(school_name)
-    return f"{base_slug}-{uuid4().hex[:8]}"  # Short UUID to ensure uniqueness
+    if School.objects.filter(slug=base_slug).exists():
+        return f"{base_slug}-{uuid4().hex[:4]}"
+    return base_slug # Short UUID to ensure uniqueness
 
 
 class School(models.Model):
@@ -124,3 +126,42 @@ def create_profile(sender, instance, created, **kwargs):
 
 # automate the profile
 post_save.connect(create_profile, sender=User)
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_id = models.CharField(max_length=255, null=True, blank=True)  # For guest users
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def total_price(self):
+        return sum(item.total_price() for item in self.items.all())
+
+    def __str__(self):
+        return f"Cart {self.id} - {self.user if self.user else 'Guest'}"
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    size = models.ForeignKey(Size, on_delete=models.SET_NULL, null=True, blank=True, default=None)
+
+    def total_price(self):
+        return self.product.price * self.quantity
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    school = models.ForeignKey("School", on_delete=models.CASCADE)  # Track the school
+    name = models.CharField(max_length=255)  # Student Name
+    student_class = models.CharField(max_length=50)  # Class (e.g., 10)
+    section = models.CharField(max_length=10)  # Section (e.g., A)
+    phone = models.CharField(max_length=10)  # Contact Number
+    address = models.TextField()  # Delivery Address
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)  # Total order cost
+    items = models.TextField()  # **Ordered items stored as formatted text**
+    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp of order
+
+    def __str__(self):
+        return f"Order {self.id} - {self.school.name} - {self.name}"

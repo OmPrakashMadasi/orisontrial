@@ -9,12 +9,14 @@
         {% csrf_token %}
 
         <!-- Username -->
+        {{ form.username.help_text|safe }}
         <label for="{{ form.username.id_for_label }}">Username</label>
         <div class="input-group mb-1">
         {{ form.username }}
         <div id="usernameError" class="error"></div>
         </div>
         <!-- Email -->
+        {{ form.email.help_text|safe }}
         <label for="{{ form.email.id_for_label }}">Email</label>
         <div class="input-group mb-1">
         {{ form.email }}
@@ -27,12 +29,14 @@
         <div id="mobileError" class="error"></div>
         </div>
         <!-- Password -->
+        {{ form.password1.help_text|safe }}
         <label for="{{ form.password1.id_for_label }}">Password</label>
         <div class="input-group mb-1">
         {{ form.password1 }}
         <div id="passwordError" class="error"></div>
         </div>
         <!-- Confirm Password -->
+        {{ form.password2.help_text|safe }}
          <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
         <div class="input-group mb-1">
         {{ form.password2 }}
@@ -46,8 +50,8 @@
 <div class="d-flex justify-content-center mt-1">
     If you already have an Account &nbsp;
     <form action="{% url 'login' slug=school.slug %}">
-        <button class="btn" style="background-color: black; color:white;width: 150px;">
-            Click here
+        <button class="btn" style="background-color: black; color:white;width: 180px;">
+            Click here to Login
         </button>
     </form>
 </div>

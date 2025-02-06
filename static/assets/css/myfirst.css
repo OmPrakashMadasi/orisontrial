@@ -5,6 +5,7 @@
 }
 
 
+
 .navbar {
   background-color:#2F3720;
 }
@@ -171,3 +172,38 @@ h2.categories {
   margin-left: 35%;
   text-align: center;
 }
+
+
+  /* General container and product styles */
+  .product-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .product {
+    flex: 1;
+    max-width: 23%;
+    text-align: center;
+    height: 250px;
+  }
+
+  .product-image {
+    max-width: 100%;
+    height: 100px;
+  }
+
+  /* Mobile Responsiveness - Single column for small devices */
+  @media (max-width: 768px) {
+    .product {
+      max-width: 48%; /* 2 items per row on medium screens */
+    }
+  }
+
+  /* Very small devices - Stack items vertically */
+  @media (max-width: 480px) {
+    .product {
+      max-width: 100%; /* Full width for each product */
+    }
+  }

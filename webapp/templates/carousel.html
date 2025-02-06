@@ -3,18 +3,23 @@
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
-          src="https://firebasestorage.googleapis.com/v0/b/uniformship-39307.appspot.com/o/banner%2Fimages%2FUniformship_Winter-Collection_WebBanner_1201%20x%20375%20px.png?alt=media&token=3f5c1c77-d512-4ff4-8b76-03cfebfec6c7"
-          class="d-block w-100" alt="Image 1" style="border-radius: 10px;">
+          src="{% static 'images/slider1.jpg' %}"
+          class="d-block w-100" height="400px" alt="Image 1" onerror="this.src='https://placehold.co/800x200'" style="border-radius: 10px;">
       </div>
       <div class="carousel-item">
         <img
-          src="https://firebasestorage.googleapis.com/v0/b/uniformship-39307.appspot.com/o/banner%2Fimages%2FBBS_Web%20Banner.jpg?alt=media&token=5ac41583-c314-4634-a52d-259b456adb35"
-          class="d-block w-100" alt="Image 2" style="border-radius: 10px;">
+          src="{% static 'images/slider2.jpg' %}"
+          class="d-block w-100" height="400px" alt="Image 2" onerror="this.src='https://placehold.co/800x200'" style="border-radius: 10px;">
       </div>
       <div class="carousel-item">
         <img
-          src="https://firebasestorage.googleapis.com/v0/b/uniformship-39307.appspot.com/o/banner%2Fimages%2F0.png?alt=media&token=b32cc6ed-3b1d-4ec1-b819-130ac2268e4f"
-          class="d-block w-100" alt="Image 3" style="border-radius: 10px;">
+          src="{% static 'images/slider3.jpg' %}"
+          class="d-block w-100" height="400px" alt="Image 3" onerror="this.src='https://placehold.co/800x200'" style="border-radius: 10px;">
+      </div>
+        <div class="carousel-item">
+        <img
+          src="{% static 'images/slider4.jpg' %}"
+          class="d-block w-100" height="400px" alt="Image 4" onerror="this.src='https://placehold.co/800x200'" style="border-radius: 10px;">
       </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -29,42 +34,53 @@
 
   <div class="container mt-5">
     <!-- Section Heading -->
-     <h2 class="categories" style="width: 100%; max-width: 300px; margin: 0 auto; text-align: center;">CATEGORIES</h2>
-   <div>
-    <h2>Girls</h2>
-    <div class="product-container">
-      <div class="product">
-        <h3>Uniform</h3>
-        <img src="https://tiimg.tistatic.com/fp/1/008/413/light-weight-and-skin-friendly-short-sleeves-cotton-check-school-uniform-frock-307.jpg" alt="Uniform" class="product-image">
-      </div>
-      <div class="product">
-        <h3>Shoes</h3>
-        <img src="https://m.media-amazon.com/images/I/61KRPqTXMKL._AC_UY1000_.jpg" alt="Shoes" class="product-image">
-      </div>
-      <div class="product">
-        <h3>Sports Uniform</h3>
-        <img src="https://s.alicdn.com/@sc04/kf/Af1a392522017445591c5ead6351ba289Z.jpg" alt="Belt Accessories" class="product-image">
+    <h2 class="categories" style="width: 100%; max-width: 300px; margin: 0 auto; text-align: center;">CATEGORIES</h2>
+
+    <div>
+      <h2>Girls</h2>
+      <div class="product-container">
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
       </div>
     </div>
-   </div>
-  <div>
-    <h2>Boys</h2>
-    <div class="product-container">
-      <div class="product">
-        <h3>Uniform</h3>
-        <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
-      </div>
-      <div class="product">
-        <h3>Belt</h3>
-        <img src="https://5.imimg.com/data5/SELLER/Default/2021/11/XS/QD/AR/27931222/belt-buckles-500x500.jpg" alt="Shoes" class="product-image">
-      </div>
-      <div class="product">
-        <h3>Sports Uniform</h3>
-        <img src="https://5.imimg.com/data5/SELLER/Default/2023/9/347854301/QM/LO/JF/53949742/kids-yellow-school-sports-uniform-set.jpeg" alt="Belt Accessories" class="product-image">
+
+    <div>
+      <h2>Boys</h2>
+      <div class="product-container">
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
+        <div class="product">
+          <h3>Uniform</h3>
+          <img src="https://5.imimg.com/data5/YV/DA/MY-10709324/boys-school-uniform-500x500.jpg" alt="Uniform" class="product-image">
+        </div>
       </div>
     </div>
   </div>
-  </div>
+
 
   <div class="container-fluid">
     <div class="row content-image-wrapper">
@@ -72,7 +88,7 @@
             <h1 class="heading">School Uniform Material</h1>
             <p>
                 Our school uniforms are made from premium-quality materials to ensure comfort, durability, and style.
-                The fabric is a blend of cotton and polyester, offering breathability and resistance to wear and tear. 
+                The fabric is a blend of cotton and polyester, offering breathability and resistance to wear and tear.
                 Designed with students' needs in mind, the uniforms are lightweight, wrinkle-resistant, and easy to maintain.
             </p>
             <p>
@@ -80,7 +96,7 @@
                 movement, and moisture-wicking properties to keep students cool and comfortable throughout the day.
             </p>
             <p>
-                Available in a variety of sizes, our uniforms ensure that every student feels confident and prepared for 
+                Available in a variety of sizes, our uniforms ensure that every student feels confident and prepared for
                 their academic journey with comfort.
             </p>
         </div>
@@ -89,4 +105,3 @@
         </div>
     </div>
 </div>
-  

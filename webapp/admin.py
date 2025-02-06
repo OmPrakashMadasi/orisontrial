@@ -6,7 +6,7 @@ from import_export.admin import ExportMixin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from django_admin_listfilter_dropdown.filters import DropdownFilter
-from .resources import CombinedUserProfileResource
+from .resources import *
 # Register your models here.
 
 
@@ -81,7 +81,7 @@ class CategoriesAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     inlines = [SizeInline, ProductInline]
     list_display = ('name', 'school',)
     search_fields = ('name', 'school',)
-    list_filter = ('school',)
+    list_filter = ('school', 'name',)
 
 admin.site.register(Categories, CategoriesAdmin)
 
@@ -94,9 +94,17 @@ admin.site.register(School, SchoolAdmin)
 
 
 
-
+class OrderAdmin(ExportMixin, admin.ModelAdmin):
+    resource_class = OrderResource
+    fields = []
+    list_filter = ('school',)
+    search_fields = ('name', 'school_name',)
+    list_per_page = 20
 
 
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Size)
+admin.site.register(Cart)
+admin.site.register(CartItem)
+admin.site.register(Order, OrderAdmin)
