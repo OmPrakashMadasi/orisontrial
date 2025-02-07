@@ -1,5 +1,3 @@
-
-
 {% extends 'base.html' %}
 {% load custom_filters %}
 {% block content %}
@@ -50,7 +48,7 @@
 <div class="d-flex justify-content-center mt-1">
     If you already have an Account :-&nbsp;
     <form action="{% url 'login' slug=school.slug %}">
-        <button class="btn" style="background-color: black; color:white;width: 180px;">
+        <button class="btn btn-primary" style="background-color: black; color:white;width: 180px;">
             Click here to Login
         </button>
     </form>

@@ -12,10 +12,10 @@
     <div class="left-sidebar d-none d-md-block"
         style="width: 250px; height: 100%; background-color: #000; color: white; padding: 20px; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); flex-shrink: 0;">
         <h3>Products</h3>
-        <ul class="nav flex-column" style="cursor:pointer">
+        <ul class="nav flex-column" >
             {% for category in categories %}
                 <li class="nav-item">
-                    <a class="nav-link text-white" onclick="showProducts('{{ category.slug }}')">{{ category.name }}</a>
+                    <a style="cursor:pointer" class="nav-link text-white" onclick="showProducts('{{ category.slug }}')">{{ category.name }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -140,10 +140,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <ul class="nav flex-column" style="cursor:pointer">
+        <ul class="nav flex-column" >
             {% for category in categories %}
                 <li class="nav-item">
-                    <a class="nav-link" onclick="showProducts('{{ category.slug }}')">{{ category.name }}</a>
+                    <a style="cursor:pointer" class="nav-link" onclick="showProducts('{{ category.slug }}')">{{ category.name }}</a>
                 </li>
             {% endfor %}
         </ul>
