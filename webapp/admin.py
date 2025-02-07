@@ -63,13 +63,10 @@ class ProfileInline(admin.StackedInline):
     model = Profile
 
 class UserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    resource_class = UserResource
     model = User
+    resource_class = UserResource
     inlines = [ProfileInline,]
     field = ["username", "mobile_number", "school"]
-
-
-
 
 class SizeInline(admin.TabularInline):
     model = Size

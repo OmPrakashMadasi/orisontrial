@@ -51,7 +51,7 @@ def register_user(request, slug):
             # Store the selected school in the session
             request.session['school_slug'] = school.slug
 
-            messages.success(request, 'registration is Successful, Please Login!!!...')
+            messages.success(request, 'Registration is Successful, Please Login!!!...')
             return redirect('login', slug=school.slug)
         else:
             for error in list(form.errors.values()):
@@ -61,49 +61,51 @@ def register_user(request, slug):
         return render(request, 'registration/register.html', {'form': form, 'school': school, 'schools': schools})
 
 # Login views :-
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import School, Profile
+from django.contrib.auth.models import User
+
+
 def login_user(request, slug):
+    # Get the school object by slug
     school = get_object_or_404(School, slug=slug)
     schools = School.objects.all()
 
     if request.method == 'POST':
-        username_or_email_or_mobile = request.POST.get('username_or_email_or_mobile')
-        password = request.POST.get('password')
+        username_or_email_or_mobile = request.POST.get('username_or_email_or_mobile')  # Input for username/email/mobile number
+        password = request.POST['password']
 
-        # Try to authenticate using the username
-        user = authenticate(request, username=username_or_email_or_mobile, password=password)
-
-        # If not found, try email
-        if not user:
-            try:
-                profile = Profile.objects.get(user__email=username_or_email_or_mobile)
-                user = authenticate(request, username=profile.user.username, password=password)
-            except Profile.DoesNotExist:
-                pass  # Handle invalid email, continue to try mobile
-
-        # If still not found, try mobile number
-        if not user:
-            try:
-                profile = Profile.objects.get(mobile_number=username_or_email_or_mobile)
-                user = authenticate(request, username=profile.user.username, password=password)
-            except Profile.DoesNotExist:
-                pass  # Handle invalid mobile number
-
-        # After trying all options, if the user is authenticated
-        if user:
-            profile = Profile.objects.get(user=user)
-
-            # Check if the user belongs to the selected school
-            if profile.school.id == school.id:
-                login(request, user)
-                request.session['school_slug'] = school.slug
-                return redirect('school_detail', slug=school.slug)
-            else:
-                messages.error(request, 'The user does not belong to the selected school.')
+        # Try to find the user by email
+        user = None
+        if '@' in username_or_email_or_mobile:
+            user = User.objects.filter(email=username_or_email_or_mobile).first()
+        elif username_or_email_or_mobile.isdigit():  # Check if it's a mobile number (purely digits)
+            user = User.objects.filter(profile__mobile_number=username_or_email_or_mobile).first()  # Use Profile model if you have one for mobile number
         else:
-            messages.error(request, 'Invalid credentials, please try again.')
+            user = User.objects.filter(username=username_or_email_or_mobile).first()
 
+        if user:
+            # Authenticate the user
+            user = authenticate(request, username=user.username, password=password)
+            if user is not None:
+                profile = Profile.objects.get(user=user)
+
+                # Check if the user belongs to the selected school
+                if profile.school.id == school.id:
+                    login(request, user)
+                    request.session['school_slug'] = school.slug  # Store the school slug in session
+                    return redirect('school_detail', slug=school.slug)
+                else:
+                    messages.error(request, 'The user does not belong to the selected school.')
+            else:
+                messages.error(request, 'Invalid credentials, please try again.')
+        else:
+            messages.error(request, 'No account found with that email/phone number.')
+
+    # Render the login page with schools and selected school context for GET requests
     return render(request, 'registration/login.html', {'schools': schools, 'school': school})
-
 
 def logout_user(request):
     # Clear the school slug from session on logout
