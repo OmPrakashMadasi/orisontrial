@@ -1,17 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Error</title>
-    <link rel="stylesheet" href="{% static 'css/error.css' %}">
-</head>
-<body>
-    <div class="container">
+{% block content %}
+    <div class="container mt-5" align="center">
         <h1>Oops! Something went wrong.</h1>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz2zUq_ws1-7qLsqHBrV0EEsOpwhdsogLWAg&s" />
         <p>We're experiencing some technical issues. Please try again later.</p>
         <a href="{% url 'home' %}">Go back to Home</a>
     </div>
-</body>
-</html>
+{% endblock %}
