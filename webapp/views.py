@@ -62,57 +62,47 @@ def register_user(request, slug):
 
 # Login views :-
 def login_user(request, slug):
-
     school = get_object_or_404(School, slug=slug)
     schools = School.objects.all()
 
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        username_or_email_or_mobile = request.POST.get('username_or_email_or_mobile')
+        password = request.POST.get('password')
 
-        if form.is_valid():
-            username_or_email_or_mobile = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+        # Try to authenticate using the username
+        user = authenticate(request, username=username_or_email_or_mobile, password=password)
 
-            # Try to authenticate using username first
-            user = authenticate(request, username=username_or_email_or_mobile, password=password)
+        # If not found, try email
+        if not user:
+            try:
+                profile = Profile.objects.get(user__email=username_or_email_or_mobile)
+                user = authenticate(request, username=profile.user.username, password=password)
+            except Profile.DoesNotExist:
+                pass  # Handle invalid email, continue to try mobile
 
-            # If authentication fails using username, try email
-            if user is None:
-                try:
-                    user = authenticate(request, username=Profile.objects.get(email=username_or_email_or_mobile).user.username, password=password)
-                except Profile.DoesNotExist:
-                    pass  # Handle invalid email
+        # If still not found, try mobile number
+        if not user:
+            try:
+                profile = Profile.objects.get(mobile_number=username_or_email_or_mobile)
+                user = authenticate(request, username=profile.user.username, password=password)
+            except Profile.DoesNotExist:
+                pass  # Handle invalid mobile number
 
-            # If authentication fails using email, try mobile number
-            if user is None:
-                try:
-                    profile = Profile.objects.get(mobile_number=username_or_email_or_mobile)
-                    user = authenticate(request, username=profile.user.username, password=password)
-                except Profile.DoesNotExist:
-                    pass  # Handle invalid mobile number
+        # After trying all options, if the user is authenticated
+        if user:
+            profile = Profile.objects.get(user=user)
 
-            # After authentication, check if the user is valid and belongs to the selected school
-            if user is not None:
-                profile = Profile.objects.get(user=user)
-                if profile.school.id == school.id:
-                    login(request, user)
-
-                    # Store the selected school in session
-                    request.session['school_slug'] = school.slug
-
-                    return redirect('school_detail', slug=school.slug)
-                else:
-                    form.add_error(None, 'Please check the school')
+            # Check if the user belongs to the selected school
+            if profile.school.id == school.id:
+                login(request, user)
+                request.session['school_slug'] = school.slug
+                return redirect('school_detail', slug=school.slug)
             else:
-                form.add_error(None, 'Invalid Credentials')
+                messages.error(request, 'The user does not belong to the selected school.')
         else:
-            for error in list(form.errors.values()):
-                messages.error(request, error)
+            messages.error(request, 'Invalid credentials, please try again.')
 
-    else:
-        form = AuthenticationForm()
-
-    return render(request, 'registration/login.html', {'schools': schools, 'form': form, 'school': school})
+    return render(request, 'registration/login.html', {'schools': schools, 'school': school})
 
 
 def logout_user(request):
