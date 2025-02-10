@@ -32,6 +32,13 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if ' ' in username:
+            raise ValidationError(
+                'Username cannot contain spaces. Please use only letters, numbers, and symbols like @, _, and -. For example: John_Elder123.')
+        return username
+
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
@@ -47,6 +54,16 @@ class SignUpForm(UserCreationForm):
         if not re.match(r'^\d{10}$', mobile_number):
             raise ValidationError("Mobile number should contain only 10 digits.")
         return mobile_number
+
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        if len(password) < 8:
+            raise ValidationError('Password must be at least 8 characters long.')
+        if not any(char.isdigit() for char in password):
+            raise ValidationError('Password must contain at least one number.')
+        if not any(char.isalpha() for char in password):
+            raise ValidationError('Password must contain at least one letter.')
+        return password
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -70,8 +87,8 @@ class SignUpForm(UserCreationForm):
         self.fields['username'].label = ''
         self.fields['username'].help_text = (
             '<span class="form-text text-muted"><small>'
-            'Required. 20 characters or fewer. Letters, digits and @/./+/-/_ only.'
-            '</small></span>'
+    'Required. 20 characters or fewer. <span class="text-danger">(No spaces allowed, only letters, numbers, and @/./+/-/_)</span>'
+    '</small></span>'
         )
 
         self.fields['password1'].widget.attrs.update({

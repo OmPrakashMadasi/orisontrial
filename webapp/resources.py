@@ -23,5 +23,5 @@ class OrderResource(resources.ModelResource):
 
     class Meta:
         model = Order
-        fields = ('username', 'email', 'school_name', 'name', 'student_class', 'section', 'phone', 'address', 'items', 'total_price', 'created_at', )
+        fields = ('id','username', 'email', 'school_name', 'name', 'student_class', 'section', 'phone', 'address', 'items', 'total_price', 'created_at', )
 
