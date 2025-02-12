@@ -13,8 +13,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-
+import urllib.parse
+from datetime import datetime, timedelta
 # Create your views here.
 
 # def regenerate_slugs():
@@ -173,6 +173,30 @@ def about(request):
     return render(request,'about.html', {'schools': schools, 'query': query, 'school': schools.first(), 'cart_count': cart_count})
 
 
+def contact(request):
+    schools = School.objects.all()
+    query = request.GET.get('query', '')
+    if query:
+        # If a query is provided, filter the schools by name
+        schools = schools.filter(name__icontains=query)
+        if schools.exists():
+            # Redirect to the register page of the first matched school
+            return redirect('register', slug=schools.first().slug)
+        else:
+            # Show a message if no schools are found
+            messages.success(request, f"No schools found for '{query}'.")
+            return redirect('contact')
+
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_count = cart.items.count()
+    else:
+        cart_count = request.session.get("cart_count", 0)
+
+    return render(request, 'ContactUs.html',
+                  {'schools': schools, 'query': query, 'school': schools.first(), 'cart_count': cart_count})
+
 def school_detail(request, slug):
     # First, check if a school is stored in the session
     school_slug = request.session.get('school_slug', None)
@@ -240,9 +264,7 @@ def add_to_cart(request, product_id):
     size_id = request.POST.get("size")
     size = Size.objects.get(id=size_id) if size_id else None
 
-    if not size:
-        size = None
-
+    # Get the quantity from the form input, default to 1 if not provided
     quantity = int(request.POST.get("quantity", 1))
 
     # Check if the item already exists in the cart with the same size
@@ -253,14 +275,19 @@ def add_to_cart(request, product_id):
     )
 
     if not created:
-        cart_item.quantity += quantity
+        # If the item already exists in the cart, update the quantity
+        cart_item.quantity += quantity  # Add the new quantity to the existing one
+        cart_item.save()
+    else:
+        # If it's a new item, set the quantity directly
+        cart_item.quantity = quantity
         cart_item.save()
 
-    request.session["cart_count"] = cart.items.count()
+    # Update the session cart count after modifying the cart
+    request.session["cart_count"] = CartItem.objects.filter(cart=cart).count()
 
-    messages.success(request, 'Product added to cart!!!')
+    messages.success(request, 'Product added to cart!')
     return redirect("school_detail", slug=product.school.slug)
-
 
 def cart_summary(request, slug):
     school = get_object_or_404(School, slug=slug)
@@ -343,9 +370,17 @@ def checkout(request, slug):
             f"{item.quantity}x {item.product.name} ({item.size.size if item.size else 'No Size'}) - ₹{(item.product.price or 0) * item.quantity}"
             for item in cart.items.all()
         )
+        # Format items as a user-friendly string
+        items_message = "\n".join(
+            f"*Product:* {item.product.name}\n*Quantity:* {item.quantity}\n*Size:* {item.size.size if item.size else 'No Size'}\n"
+            for item in cart.items.all()
+        )
 
         # Calculate total price
         total_price = sum((item.product.price or 0) * item.quantity for item in cart.items.all())
+
+        # Calculate delivery date (3 days from today)
+        delivery_date = (datetime.now() + timedelta(days=3)).strftime('%Y-%m-%d')
 
         # Create the order
         Order.objects.create(
@@ -364,8 +399,22 @@ def checkout(request, slug):
         cart.items.all().delete()
         request.session["cart_count"] = 0  # Reset session cart count
 
-        messages.success(request, "Order placed successfully!")
-        return redirect("home")  # Redirect to homepage after order is placed
+        # Create WhatsApp message link
+        message = (
+            f"Hello {name},\n\n"
+            f"Your order has been placed successfully!\n"
+            f"*School:* {school.name}\n" 
+            f"*Class/Section:*({student_class}/{section})\n"
+            f"*Address:* {address}\n"
+            f"*Items:*\n{items_message}\n\n"
+            f"*Expected Delivery Date:* {delivery_date}\n\n"
+            f"Thank you for shopping with us!"
+        )
+        encoded_message = urllib.parse.quote(message)
+        whatsapp_link = f"https://wa.me/+919701590714?text={encoded_message}"
+
+        messages.success(request, f"Order placed successfully!")
+        return redirect(whatsapp_link)  # Redirect to homepage after order is placed
 
     return redirect("home", slug=slug)
 

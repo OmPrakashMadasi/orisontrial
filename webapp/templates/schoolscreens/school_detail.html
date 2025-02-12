@@ -11,7 +11,7 @@
     <!-- Left Sidebar for Large Devices (Hidden on mobile) -->
     <div class="left-sidebar d-none d-md-block"
         style="width: 250px; height: 100%; background-color: #000; color: white; padding: 20px; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); flex-shrink: 0;">
-        <h3>Products</h3>
+        <!-- <h3>Products - <small class="card-text text-primary" > <b>{{ school.name }}</b> </small> </h3> -->
         <ul class="nav flex-column" >
             {% for category in categories %}
                 <li class="nav-item">
@@ -62,67 +62,89 @@
             <h1 id="welcomeText">Welcome to the Products {{ school.name }}</h1>
         </div>
 
+
         <!-- Product Categories (Initially Hidden) -->
         <div id="productsContainer" class="row d-flex justify-content-start" style="display: none;">
+            <div style="display: flex;justify-content: space-between;">
+                <h3>Products - <small class="card-text text-primary" > <b>{{ school.name }}</b> </small> </h3>
+                <a href="#" class="text-decoration-none d-inline-block mt-2 px-3 py-2 fs-20 fw-bold text-black rounded-3
+                transition-all hover:bg-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSizeChart" aria-controls="offcanvasSizeChart">
+                <i class="bi bi-arrow-right-circle" style="color:blue; font-size: 30px; transition: color 0.3s;"></i>
+             </a>
+
+
+            </div>
+<!-- Offcanvas for size chart -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasSizeChart" aria-labelledby="offcanvasSizeChartLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasSizeChartLabel">Size Chart</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- Placeholder for size chart image -->
+    <img src="{% static 'images/sizechart.jpg' %}" alt="Size Chart Image" class="img-fluid">
+  </div>
+</div>
+
             {% for category, products in products_by_category.items %}
                 {% for product in products %}
                     <div class="col-md-4 mb-4 productCategory {{ category.slug }}" style="display: none;">
+
                         <div class="card">
-                            <!-- Adjusting Image Size -->
-                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"
-                                style="height: 200px; object-fit:contain;">
+                            <!-- Product Image -->
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: contain;">
 
                             <div class="card-body">
                                 <form method="post" action="{% url 'add_to_cart' product.id %}">
-                                        {% csrf_token %}
+                                    {% csrf_token %}
 
-                                <h5 class="card-title">{{ product.name }}</h5>
-                                <p class="card-text"  style="color: red;">{{ product.description }}</p>
-                                <div style="display: flex;">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text text-danger">{{ product.description }}</p>
 
-                                        <button type="submit" class="btn bg-dark text-light">Add to Cart</button>
-
-                                    <div class="ms-3" style="display: flex; align-items: center; gap: 5px;">
-                                        <!-- Label for Quantity -->
-                                        <label for="quantity-{{ product.id }}" class="form-label"
-                                            style="font-size: 14px;">Quantity:</label>
-                                        <select name="quantity" class="form-select" id="quantity-{{ product.id }}"
-                                            style="width: 80px; height: 35px; font-size: 14px;">
-                                            {% for i in "1234"|make_list %}
-                                                    <option value="{{ i }}">{{ i }}</option>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <!-- Quantity Dropdown -->
+                                        <div class="ms-3 d-flex align-items-center" style="width: 50%;">
+                                            <select required name="quantity" class="form-select w-100" id="quantity-{{ product.id }}" style="height: 35px; font-size: 14px;">
+                                                <option value="" disabled selected >Enter Quantity</option>
+                                                {% for i in "1234"|make_list %}
+                                                    <option value="{{ i }}" {% if i == 1 %} selected {% endif %}>
+                                                        {{ i }}</option>
                                                 {% endfor %}
-                                        </select>
+                                            </select>
+                                        </div>
+
+                                        {% if category.size.exists %}
+                                        <!-- Size Dropdown -->
+                                        <div class="ms-2 d-flex flex-column align-items-start" style="width: 50%;">
+                                            <div>
+                                            <!-- <a href="#" class="text-decoration-none size-chart-link" data-target="sizeChartPopup-{{ product.id }}" style="margin-bottom: 10px;">Size chart</a> -->
+
+                                            </div>
+                                            <select class="form-select w-100" name="size" id="size-{{ product.id }}" required style="height: 35px; font-size: 14px;">
+                                                <option value="" disabled selected>Select Size</option>
+                                                {% for size in category.size.all %}
+                                                    <option value="{{ size.id }}">{{ size.size }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        {% endif %}
                                     </div>
-                                </div>
-                                <div style="display: flex;">
-                                    {% if category.size.exists %}
-                                    <div class="ms-2">
-                                        <label for="size-{{ product.id }}" class="form-label">Select Size:</label>
-                                        <select class="form-select" name="size" id="size-{{ product.id }}" required>
-                                            <option value="" disabled selected>Select Size</option>
-                                            {% for size in category.size.all %}
-                                                <option value="{{ size.id }}">{{ size.size }}</option>
-                                            {% endfor %}
-                                        </select>
+
+                                    <!-- Add to Cart Button -->
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button type="submit" class="btn text-light" style="width: 200px;background-color: rgb(22, 22, 52);">Add to Cart</button>
                                     </div>
-                                    {% endif %}
-                                    &nbsp;
-                                    &nbsp;
-                                    &nbsp;
-                                    <div class="ms-2" style="display: flex; align-items: center; gap: 5px; margin-top: 40px;">
-                                        <a href="#" class="text-decoration-none size-chart-link" data-target="sizeChartPopup-{{ product.id }}">Size chart</a>
-                                    </div>
-                                </div>
-                                 </form>
+                                </form>
                             </div>
+
                             <!-- Size Chart Popup -->
-                            <div id="sizeChartPopup-{{ product.id }}"
-                                style="display: none; position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); z-index: 1000; border-radius: 10px;">
-                                <button class="close-size-chart" style="border: none; background: none; font-size: 24px; color: red; cursor: pointer; float: right;">&times;</button>
+                            <!-- <div id="sizeChartPopup-{{ product.id }}" class="position-fixed top-10 start-50 translate-middle-x p-3 bg-white shadow-lg rounded" style="display: none; width: 90%; max-width: 500px; z-index: 1000;">
+                                <button class="close-size-chart border-0 bg-transparent text-danger fs-4" style="float: right; cursor: pointer;">&times;</button>
                                 <h5>Size Chart</h5>
                                 <img src="{% static 'images/sizechart.jpg' %}" alt="Size Chart Image" class="img-fluid">
-                            </div>
+                            </div> -->
                         </div>
+
                     </div>
 
                 {% endfor %}

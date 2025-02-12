@@ -18,6 +18,7 @@ urlpatterns = [
     path('', views.home, name='home'),
 
     path('about/',views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
     path('school/<slug:slug>/products/',views.school_detail, name='school_detail'),
     path('school/<slug:slug>/cart/', views.cart_summary, name='cart_summary'),
     path("school/<slug:slug>/checkout/", views.checkout, name="checkout"),

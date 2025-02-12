@@ -228,3 +228,113 @@ h2.categories {
   background-color: rgba(7, 149, 66, 0.35); /* Hover effect */
   transition: 0.5s;
 }
+
+
+
+
+
+.scroll-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  background: #f9f9f9;
+  padding: 10px 0;
+}
+
+/* Scrolling content (with duplicate images for seamless effect) */
+.scroll-content {
+  display: flex;
+  gap: 30px; /* Maintain minimum spacing */
+  animation: scrollLeft 15s linear infinite;
+}
+
+/* Keyframes for continuous scrolling */
+@keyframes scrollLeft {
+  from {
+      transform: translateX(0);
+  }
+  to {
+      transform: translateX(-50%);
+  }
+}
+
+/* Ensuring proper image size */
+.school-logo {
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 150px;
+  height: 150px;
+  object-fit: cover; /* Prevents shrinking/stretching */
+}
+
+/* Duplicating images for infinite scrolling */
+.scroll-content-wrapper {
+  display: flex;
+  width: 200%; /* Makes sure images loop smoothly */
+}
+
+
+
+        .category-item .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .category-item .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .category-info {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+
+        .category-info h5 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+
+        .category-info p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .see-more-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .see-more-btn i {
+            margin-left: 8px;
+        }
+
+        .see-more-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Custom Styles for Card Sizes */
+        .card-large {
+            height: 400px;
+        }
+
+        .card-small {
+            height: 250px;
+        }
+
+        /* Align items properly within the container */
+        .category-item {
+            margin-bottom: 20px;
+        }
